@@ -1,0 +1,21 @@
+{
+  "name": "apollo-server-testfield",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-core": "^6.7.7",
+    "babel-polyfill": "^6.7.4",
+    "babel-preset-es2015": "^6.6.0",
+    "babel-preset-stage-3": "^6.5.0"
+  },
+  "dependencies": {
+    "express": "^4.13.4",
+    "graphql-tools": "^0.3.12"
+  }
+}
