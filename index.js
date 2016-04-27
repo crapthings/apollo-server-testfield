@@ -6,26 +6,9 @@ import _ from 'lodash'
 
 import faker from 'faker'
 
+import { userClass, postClass } from './data/index'
+
 const server = express()
-
-//
-
-class user {
-	constructor (opt) {
-		this.username = faker.name.findName()
-		this.age = faker.random.number()
-		this.desc = this.username + this.age
-		opt && _.extend(this, opt)
-	}
-}
-
-class post {
-	constructor (opt) {
-		this.title = faker.lorem.sentence()
-	}
-}
-
-//
 
 const schema = `
 
@@ -60,29 +43,29 @@ const resolvers = {
 	RootQuery: {
 		users () {
 			return _.times(10, n => {
-				return new user()
+				return new userClass()
 			})
 		},
 		user () {
-			return new user()
+			return new userClass()
 		},
 
 		posts () {
 			return _.times(10, n => {
-				return new post()
+				return new postClass()
 			})
 		}
 	},
 	User: {
 		posts () {
 			return _.times(10, n => {
-				return new post()
+				return new userClass()
 			})
 		}
 	},
 	Post: {
 		user () {
-			return new user()
+			return new userClass()
 		}
 	}
 }
