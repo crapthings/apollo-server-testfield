@@ -16,6 +16,8 @@
   },
   "dependencies": {
     "express": "^4.13.4",
-    "graphql-tools": "^0.3.12"
+    "faker": "^3.1.0",
+    "graphql-tools": "^0.3.12",
+    "lodash": "^4.11.1"
   }
 }
