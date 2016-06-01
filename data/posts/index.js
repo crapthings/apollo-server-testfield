@@ -1,10 +1,4 @@
-import _ from 'lodash'
-
-import faker from 'faker'
-
-//
-
-export class post {
+export default class postClass {
 	constructor (opt) {
 		this.title = faker.lorem.sentence()
 	}

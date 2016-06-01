@@ -1,10 +1,4 @@
-import _ from 'lodash'
-
-import faker from 'faker'
-
-//
-
-export class userClass {
+export default class userClass {
 	constructor (opt) {
 		this.username = faker.name.findName()
 		this.age = faker.random.number()

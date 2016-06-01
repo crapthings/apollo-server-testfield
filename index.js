@@ -6,33 +6,76 @@ import _ from 'lodash'
 
 import faker from 'faker'
 
-import { userClass, postClass } from './data/index'
-
 const server = express()
+
+//
+
+class authorClass {
+	constructor (opt) {
+		this.id = opt && opt.id || faker.random.uuid()
+		this.name = faker.name.findName()
+		this.age = faker.random.number()
+		this.desc = faker.lorem.sentences()
+
+		this.books = _.times(10, n => {
+			return new bookClass({
+				id: n + 1,
+				authorId: this.id
+			})
+		})
+
+		opt && _.extend(this, opt)
+	}
+}
+
+class bookClass {
+	constructor (opt) {
+		this.id = opt && opt.id || faker.random.uuid()
+		this.title = faker.lorem.sentence()
+		this.desc = faker.lorem.sentences()
+		opt && _.extend(this, opt)
+	}
+}
+
+const authors = _.times(10, n => {
+	return new authorClass({
+		id: n + 1
+	})
+})
+
+const books = _.chain(authors)
+	.map(author => { return author.books })
+	.flatten()
+	.value()
+
+//
 
 const schema = `
 
-type User {
-	username: String # 这个可以啪啪啪
+schema {
+	query: Query
+}
+
+type Query {
+	authors: [Author]
+	author(id: Int, name: String): Author
+	randomAuthor: Author
+	books: [Book]
+}
+
+type Author {
+	id: Int
+	name: String
 	age: Int
 	desc: String
-	type: String
-	posts: [Post]
+	books: [Book]
 }
 
-type Post {
+type Book {
+	id: Int
 	title: String
-	user: User
-}
-
-type RootQuery {
-	user: User
-	users: [User]
-	posts: [Post]
-}
-
-schema {
-	query: RootQuery
+	authorId: Int
+	author: Author
 }
 
 `
@@ -40,40 +83,48 @@ schema {
 //
 
 const resolvers = {
-	RootQuery: {
-		users () {
-			return _.times(10, n => {
-				return new userClass()
-			})
-		},
-		user () {
-			return new userClass()
+	Query: {
+
+		__description: 'haha',
+		authors () {
+			return authors
 		},
 
-		posts () {
-			return _.times(10, n => {
-				return new postClass()
+		author (root, args) {
+			return _.find(authors, args)
+		},
+
+		books () {
+			return books
+		},
+
+		randomAuthor () {
+			return _.sample(authors)
+		}
+	},
+
+	Author: {
+		books (author, args) {
+			return _.filter(books, book => {
+				return author.id == book.authorId
 			})
 		}
 	},
-	User: {
-		posts () {
-			return _.times(10, n => {
-				return new userClass()
+
+	Book: {
+		author (book, args) {
+			return _.find(authors, author => {
+				return book.authorId == author.id
 			})
-		}
-	},
-	Post: {
-		user () {
-			return new userClass()
 		}
 	}
 }
 
 server.use('/graphql', apolloServer({
 	graphiql: true,
+	pretty: true,
 	schema,
 	resolvers
 }))
 
-server.listen(3000)
+server.listen(4000)

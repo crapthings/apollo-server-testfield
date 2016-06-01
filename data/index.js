@@ -1,7 +1,2 @@
-import { userClass } from './users'
-import { postClass } from './posts'
-
-export {
-	userClass,
-	postClass
-}
+export userClass from './users'
+export postClass from './posts'
